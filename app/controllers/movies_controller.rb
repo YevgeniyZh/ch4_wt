@@ -4,7 +4,7 @@ class MoviesController < ApplicationController
   def index
     @movies = Movie.all
   end
-end
+
 # in app/controllers/movies_controller.rb
 def show
   id = params[:id] # retrieve movie ID from URI route
@@ -12,10 +12,7 @@ def show
   # will render app/views/movies/show.html.haml by default
 end
 
-private 
-def movie_params
-    params.require(:movie).permit(:title, :rating, :description, :release_date)
-end
+
 # for debugging 
 # def show
 #   @movie = Movie.find_by_id(params[:id]) # what if this movie not in DB?
@@ -24,4 +21,15 @@ end
 def new
   # default: render 'new' template
 end
- 
+ # in movies_controller.rb
+def create
+  #@movie = Movie.create!(params[:movie]) #old way
+  @movie=Movie.create!(movie_params)#new way
+  flash[:notice]="#{@movie.title} was successfully created."
+  redirect_to movies_path
+end
+end
+private 
+def movie_params
+    params.require(:movie).permit(:title, :rating, :description, :release_date)
+end
